@@ -201,7 +201,7 @@ Query → BM25 FTS ─────┘
   - 每次反思会写入 1 条 event row（`type=memory-reflection-event`）以及多条 item row（`type=memory-reflection-item`，对应每个 `Invariants` / `Derived` bullet）。
   - event row 仅保留轻量 provenance / audit 元数据（`eventId`、`sessionKey`、`usedFallback`、`errorSignals`、source path）。
   - item row 携带逐条衰减元数据（`decayModel`、`decayMidpointDays`、`decayK`、`baseWeight`、`quality`）以及 `ordinal/groupSize`。
-  - 兼容模式：`memoryReflection.writeLegacyCombined=true`（默认）时，迁移期仍会额外写入旧版 combined row（`type=memory-reflection`）。
+  - 仅使用 itemized reflection rows；旧版 combined row（`type=memory-reflection`）已不再写入，也不再参与读取。
   - reflection 行展示标签为 `reflection:<scope>`。
 - Reflection 派生 durable memory 映射：
   - 插件支持的 memory categories 包括 `preference`、`fact`、`decision`、`entity`、`reflection`、`other`。
@@ -309,7 +309,7 @@ Query → BM25 FTS ─────┘
 
 ## 安装
 
-> **🧪 Beta 版本可用：v1.1.0-beta.3**
+> **🧪 Beta 版本可用：v1.1.0-beta.5**
 >
 > Beta 版包含多项重大新特性：**Self-Improvement 治理流**、**memoryReflection 会话策略**、**Markdown 镜像双写**、以及改进的 Embedding 错误诊断。稳定版 `latest` 仍为 v1.0.32。
 >
@@ -321,7 +321,7 @@ Query → BM25 FTS ─────┘
 > npm install memory-lancedb-pro
 > ```
 >
-> 详见 [Release Notes](https://github.com/win4r/memory-lancedb-pro/releases/tag/v1.1.0-beta.3)。欢迎通过 [GitHub Issues](https://github.com/win4r/memory-lancedb-pro/issues) 反馈问题。
+> 详见 [Release Notes](https://github.com/win4r/memory-lancedb-pro/releases/tag/v1.1.0-beta.5)。欢迎通过 [GitHub Issues](https://github.com/win4r/memory-lancedb-pro/issues) 反馈问题。
 
 ### AI 安装指引（防幻觉版）
 
@@ -510,7 +510,6 @@ openclaw config get plugins.slots.memory
   },
   "memoryReflection": {
     "storeToLanceDB": true,
-    "writeLegacyCombined": true,
     "injectMode": "inheritance+derived",
     "agentId": "memory-distiller",
     "messageCount": 120,
