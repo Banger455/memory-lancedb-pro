@@ -138,7 +138,7 @@ If you are using OpenClaw's Telegram integration, the easiest way is to send an 
 Send this message:
 
 ```text
-Help me connect this memory plugin with the best user-experience config: https://github.com/win4r/memory-lancedb-pro
+Help me connect this memory plugin with the best user-experience config: https://github.com/CortexReach/memory-lancedb-pro
 
 Requirements:
 1. Set it as the only active memory plugin
@@ -589,7 +589,7 @@ Note: reinforcement is whitelisted to `source: "manual"` only, to avoid auto-rec
 
 ```bash
 cd /path/to/your/openclaw/workspace
-git clone https://github.com/win4r/memory-lancedb-pro.git plugins/memory-lancedb-pro
+git clone https://github.com/CortexReach/memory-lancedb-pro.git plugins/memory-lancedb-pro
 cd plugins/memory-lancedb-pro
 npm install
 ```
@@ -908,7 +908,7 @@ On LanceDB 0.26+, some numeric columns may be returned as `BigInt`. Upgrade to *
 | **Lifecycle Scoring** | Weibull decay integrated into retrieval — high-frequency and high-importance memories rank higher. |
 | **Tier Management** | Three-tier system (Core → Working → Peripheral) with automatic promotion/demotion. |
 
-Feedback: [GitHub Issues](https://github.com/win4r/memory-lancedb-pro/issues) · Revert: `npm i memory-lancedb-pro@latest`
+Feedback: [GitHub Issues](https://github.com/CortexReach/memory-lancedb-pro/issues) · Revert: `npm i memory-lancedb-pro@latest`
 
 ---
 
@@ -947,15 +947,15 @@ Feedback: [GitHub Issues](https://github.com/win4r/memory-lancedb-pro/issues) ·
 <a href="https://github.com/chenjiyong"><img src="https://avatars.githubusercontent.com/u/8199522?v=4" width="48" height="48" alt="@chenjiyong" /></a>
 </p>
 
-Full list: [Contributors](https://github.com/win4r/memory-lancedb-pro/graphs/contributors)
+Full list: [Contributors](https://github.com/CortexReach/memory-lancedb-pro/graphs/contributors)
 
 ## ⭐ Star History
 
-<a href="https://star-history.com/#win4r/memory-lancedb-pro&Date">
+<a href="https://star-history.com/#CortexReach/memory-lancedb-pro&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=win4r/memory-lancedb-pro&type=Date&theme=dark&transparent=true" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=win4r/memory-lancedb-pro&type=Date&transparent=true" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=win4r/memory-lancedb-pro&type=Date&transparent=true" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=CortexReach/memory-lancedb-pro&type=Date&theme=dark&transparent=true" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=CortexReach/memory-lancedb-pro&type=Date&transparent=true" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=CortexReach/memory-lancedb-pro&type=Date&transparent=true" />
   </picture>
 </a>
 

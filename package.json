@@ -20,7 +20,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/win4r/memory-lancedb-pro.git"
+    "url": "git+https://github.com/CortexReach/memory-lancedb-pro.git"
   },
   "author": "win4r",
   "license": "MIT",
