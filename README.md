@@ -130,6 +130,44 @@ You should see:
 
 🎉 **Done!** Your agent now has long-term memory.
 
+## 🛡️ Admission Control (A-MAC v1.1)
+
+`memory-lancedb-pro` now supports an A-MAC-style admission-control layer on the smart-extraction write path.
+
+It is designed as a governance layer:
+- extracted candidates are scored before persistence
+- low-value candidates can be rejected early
+- admitted candidates still flow into the existing downstream dedup pipeline
+
+Recommended starting config:
+
+```json
+{
+  "admissionControl": {
+    "enabled": true,
+    "preset": "balanced",
+    "utilityMode": "standalone",
+    "auditMetadata": true,
+    "persistRejectedAudits": true
+  }
+}
+```
+
+Available presets:
+- `balanced` → recommended default for most deployments
+- `conservative` → higher precision, fewer memories admitted
+- `high-recall` → lower rejection, better when you are afraid of missing useful memories
+
+Operationally, you can inspect admission behavior with:
+
+```bash
+openclaw memory-pro stats --json
+openclaw memory-pro admission-rejections --stats --json
+openclaw memory-pro admission-rejections --tail 20
+```
+
+For the full design, feature definitions, presets, audit behavior, and rollout guidance, see [docs/admission-control.md](docs/admission-control.md).
+
 <details>
 <summary><strong>💬 OpenClaw Quick Import via Telegram Bot (click to expand)</strong></summary>
 
@@ -242,6 +280,8 @@ For example, to replace only the LLM:
 ```
 
 > 📖 For a deep-dive into the full architecture (data flow, lifecycle, storage internals), see [docs/memory_architecture_analysis.md](docs/memory_architecture_analysis.md).
+
+> 🛡️ For admission-control design, presets, and observability, see [docs/admission-control.md](docs/admission-control.md).
 
 <details>
 <summary><strong>📄 File Reference (click to expand)</strong></summary>
@@ -917,6 +957,7 @@ Feedback: [GitHub Issues](https://github.com/CortexReach/memory-lancedb-pro/issu
 | Document | Description |
 | --- | --- |
 | [OpenClaw Integration Playbook](docs/openclaw-integration-playbook.md) | Deployment modes, `/new` verification, regression matrix |
+| [Admission Control Guide](docs/admission-control.md) | A-MAC-style governance, presets, audits, and observability |
 | [Memory Architecture Analysis](docs/memory_architecture_analysis.md) | Full architecture deep-dive |
 | [CHANGELOG v1.1.0](docs/CHANGELOG-v1.1.0.md) | v1.1.0 behavior changes and upgrade rationale |
 | [Long-Context Chunking](docs/long-context-chunking.md) | Chunking strategy for long documents |
