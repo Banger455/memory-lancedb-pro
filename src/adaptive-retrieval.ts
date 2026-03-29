@@ -32,6 +32,9 @@ const FORCE_RETRIEVE_PATTERNS = [
   /\b(my (name|email|phone|address|birthday|preference))\b/i,
   /\b(what did (i|we)|did i (tell|say|mention))\b/i,
   /(你记得|[你妳]記得|之前|上次|以前|还记得|還記得|提到过|提到過|说过|說過)/i,
+  // German retrieval triggers
+  /\b(erinnerst du dich|weißt du noch|was (war|ist) mein|letzte[sn]?\s+mal|vorher|vorhin|gestern|neulich)\b/i,
+  /\b(merk dir|merke dir|habe ich dir gesagt|habe ich erw[äa]hnt)\b/i,
 ];
 
 /**
