@@ -750,7 +750,7 @@ function shouldSkipReflectionMessage(role: string, text: string): boolean {
 
 const AUTO_CAPTURE_MAP_MAX_ENTRIES = 2000;
 const AUTO_CAPTURE_EXPLICIT_REMEMBER_RE =
-  /^(?:请|請)?(?:记住|記住|记一下|記一下|别忘了|別忘了)[。.!?？!]*$/u;
+  /^(?:请|請)?(?:remember(?:\s+this)?|merk(?:e?\s+dir|\s+es\s+dir)|vergiss\s+(?:das\s+)?nicht|nicht\s+vergessen|记住|記住|记一下|記一下|别忘了|別忘了)[。.!?？!]*$/iu;
 
 /**
  * Prune a Map to stay within the given maximum number of entries.
@@ -1270,6 +1270,12 @@ const MEMORY_TRIGGERS = [
   /老是|講不聽|總是|总是|從不|从不|一直|每次都/,
   /重要|關鍵|关键|注意|千萬別|千万别/,
   /幫我|筆記|存檔|存起來|存一下|重點|原則|底線/,
+  // German triggers
+  /merk(?:e?\s+dir|\s+es\s+dir)|erinner(?:e)?\s+dich|vergiss\s+(?:das\s+)?nicht|nicht\s+vergessen/i,
+  /ich bevorzuge|ich mag|ich hasse|ich will|ich brauche/i,
+  /wir haben entschieden|wir nutzen|ab jetzt|ab sofort|in zukunft/i,
+  /mein\s+\w+\s+(?:ist|heißt)|ich\s+(?:wohne|arbeite)\b/i,
+  /\b(immer\s+(?:wenn|daran|denken|merken|beachten)|niemals|wichtig)\b/i,
 ];
 
 const CAPTURE_EXCLUDE_PATTERNS = [
