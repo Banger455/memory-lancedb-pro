@@ -10,12 +10,12 @@ const SKIP_PATTERNS = [
   // Greetings & pleasantries
   /^(hi|hello|hey|good\s*(morning|afternoon|evening|night)|greetings|yo|sup|howdy|what'?s up)\b/i,
   // System/bot commands
-  /^\//,  // slash commands
+  /^\//, // slash commands
   /^(run|build|test|ls|cd|git|npm|pip|docker|curl|cat|grep|find|make|sudo)\b/i,
   // Simple affirmations/negations
-  /^(yes|no|yep|nope|ok|okay|sure|fine|thanks|thank you|thx|ty|got it|understood|cool|nice|great|good|perfect|awesome|ð|ð|â|â)\s*[.!]?$/i,
+  /^(yes|no|yep|nope|ok|okay|sure|fine|thanks|thank you|thx|ty|got it|understood|cool|nice|great|good|perfect|awesome|👍|👎|✅|❌)\s*[.!]?$/iu,
   // Continuation prompts
-  /^(go ahead|continue|proceed|do it|start|begin|next|å®æ½|å¯¦æ½|å¼å§|éå§|ç»§ç»­|ç¹¼çº|å¥½ç|å¯ä»¥|è¡)\s*[.!]?$/i,
+  /^(go ahead|continue|proceed|do it|start|begin|next|实施|實施|开始|開始|继续|繼續|好的|可以|行)\s*[.!]?$/i,
   // Pure emoji
   /^[\p{Emoji}\s]+$/u,
   // Heartbeat/system (match anywhere, not just at start, to handle prefixed formats)
@@ -31,10 +31,10 @@ const FORCE_RETRIEVE_PATTERNS = [
   /\b(last time|before|previously|earlier|yesterday|ago)\b/i,
   /\b(my (name|email|phone|address|birthday|preference))\b/i,
   /\b(what did (i|we)|did i (tell|say|mention))\b/i,
-  /(ä½ è®°å¾|[ä½ å¦³]è¨å¾|ä¹å|ä¸æ¬¡|ä»¥å|è¿è®°å¾|éè¨å¾|æå°è¿|æå°é|è¯´è¿|èªªé)/i,
+  /(你记得|[你妳]記得|之前|上次|以前|还记得|還記得|提到过|提到過|说过|說過)/i,
   // German retrieval triggers
-  /\b(erinnerst du dich|weiÃt du noch|hast du gespeichert)\b/i,
-  /\b(gestern|letzte[srnm]?\s+mal|vorher|frÃ¼her|neulich|kÃ¼rzlich)\b/i,
+  /\b(erinnerst du dich|weißt du noch|hast du gespeichert)\b/i,
+  /\b(gestern|letzte[srnm]?\s+mal|vorher|früher|neulich|kürzlich)\b/i,
 ];
 
 /**
@@ -48,18 +48,14 @@ const FORCE_RETRIEVE_PATTERNS = [
  */
 function normalizeQuery(query: string): string {
   let s = query.trim();
-
   // 1. Strip OpenClaw injected metadata headers (Conversation info or Sender).
-  // Use a global regex to strip all metadata blocks including following blank lines.
+  //    Use a global regex to strip all metadata blocks including following blank lines.
   const metadataPattern = /^(Conversation info|Sender) \(untrusted metadata\):[\s\S]*?\n\s*\n/gim;
   s = s.replace(metadataPattern, "");
-
   // 2. Strip OpenClaw cron wrapper prefix.
   s = s.trim().replace(/^\[cron:[^\]]+\]\s*/i, "");
-
   // 3. Strip OpenClaw timestamp prefix [Mon 2026-03-02 04:21 GMT+8].
   s = s.trim().replace(/^\[[A-Za-z]{3}\s\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}\s[^\]]+\]\s*/, "");
-
   const result = s.trim();
   return result;
 }
@@ -74,7 +70,7 @@ export function shouldSkipRetrieval(query: string, minLength?: number): boolean 
   const trimmed = normalizeQuery(query);
 
   // Force retrieve if query has memory-related intent (checked FIRST,
-  // before length check, so short CJK queries like "ä½ è®°å¾å" aren't skipped)
+  // before length check, so short CJK queries like "你记得吗" aren't skipped)
   if (FORCE_RETRIEVE_PATTERNS.some(p => p.test(trimmed))) return false;
 
   // Too short to be meaningful
@@ -85,7 +81,7 @@ export function shouldSkipRetrieval(query: string, minLength?: number): boolean 
 
   // If caller provides a custom minimum length, use it
   if (minLength !== undefined && minLength > 0) {
-    if (trimmed.length < minLength && !trimmed.includes('?') && !trimmed.includes('ï¼')) return true;
+    if (trimmed.length < minLength && !trimmed.includes('?') && !trimmed.includes('？')) return true;
     return false;
   }
 
@@ -93,7 +89,7 @@ export function shouldSkipRetrieval(query: string, minLength?: number): boolean 
   // CJK characters carry more meaning per character, so use a lower threshold
   const hasCJK = /[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af]/.test(trimmed);
   const defaultMinLength = hasCJK ? 6 : 15;
-  if (trimmed.length < defaultMinLength && !trimmed.includes('?') && !trimmed.includes('ï¼')) return true;
+  if (trimmed.length < defaultMinLength && !trimmed.includes('?') && !trimmed.includes('？')) return true;
 
   // Default: do retrieve
   return false;
