@@ -1329,28 +1329,28 @@ export function detectCategory(
 ): "preference" | "fact" | "decision" | "entity" | "other" {
   const lower = text.toLowerCase();
   if (
-    /prefer|radši|like|love|hate|want|偏好|喜歡|喜欢|討厭|讨厌|不喜歡|不喜欢|愛用|爱用|習慣|习惯/i.test(
+    /prefer|radši|like|love|hate|want|偏好|喜歡|喜欢|討厭|讨厌|不喜歡|不喜欢|愛用|爱用|習慣|习惯|bevorzuge|ich mag|ich hasse|ich will|ich brauche|lieber|am liebsten/i.test(
       lower,
     )
   ) {
     return "preference";
   }
   if (
-    /rozhodli|decided|we decided|will use|we will use|we'?ll use|switch(ed)? to|migrate(d)? to|going forward|from now on|budeme|決定|决定|選擇了|选择了|改用|換成|换成|以後用|以后用|規則|流程|SOP/i.test(
+    /rozhodli|decided|we decided|will use|we will use|we'?ll use|switch(ed)? to|migrate(d)? to|going forward|from now on|budeme|決定|决定|選擇了|选择了|改用|換成|换成|以後用|以后用|規則|流程|SOP|entschieden|wir nutzen|ab jetzt|ab sofort|in zukunft|wechseln zu|umsteigen/i.test(
       lower,
     )
   ) {
     return "decision";
   }
   if (
-    /\+\d{10,}|@[\w.-]+\.\w+|is called|jmenuje se|我的\S+是|叫我|稱呼|称呼/i.test(
+    /\+\d{10,}|@[\w.-]+\.\w+|is called|jmenuje se|我的\S+是|叫我|稱呼|称呼|heiße|heißt|mein name/i.test(
       lower,
     )
   ) {
     return "entity";
   }
   if (
-    /\b(is|are|has|have|je|má|jsou)\b|總是|总是|從不|从不|一直|每次都|老是/i.test(
+    /\b(is|are|has|have|je|má|jsou|ist|sind|hat|haben)\b|總是|总是|從不|从不|一直|每次都|老是/i.test(
       lower,
     )
   ) {
