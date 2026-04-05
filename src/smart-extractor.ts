@@ -71,33 +71,19 @@ import { batchDedup } from "./batch-dedup.js";
  */
 export function stripEnvelopeMetadata(text: string): string {
   // 0. Strip runtime orchestration wrappers that should never become memories
-  //    (sub-agent task scaffolding is execution metadata, not conversation content).
-  let cleaned = text.replace(
-    /^\[(?:Subagent Context|Subagent Task)\]\s*(?:You are running as a subagent.*?(?:$|(?<=\.)\s+)|Results auto-announce to your requester\.?\s*|do not busy-poll for status\.?\s*|Reply with a brief acknowledgment only\.?\s*|Do not use any memory tools\.?\s*)?/gim,
-    "",
-  );
-  cleaned = cleaned.replace(
-    /^(?:Results auto-announce to your requester\.?|do not busy-poll for status\.?|Do not use any memory tools\.?)\s*$/gim,
-    "",
+  //    (sub-agent task scaffolding is execution metadata, not conversation content)
+
+  // Step 1: strip the bracket prefix
+  text = text.replace(/^\[(?:Subagent Context|Subagent Task)\]\s*/gim, '');
+
+  // Step 2: strip boilerplate content lines
+  text = text.replace(
+    /^(?:You are running as a subagent\b.*|Results auto-announce to your requester\.?|do not busy-poll for status\.?|Reply with a brief acknowledgment only\.?|Do not use any memory tools\.?)\s*\n?/gim,
+    ''
   );
 
-  // 1. Strip "System: [timestamp] Channel..." lines
-  cleaned = cleaned.replace(
-    /^System:\s*\[[\d\-: +GMT]+\]\s+\S+\[.*?\].*$/gm,
-    "",
-  );
-
-  // 2. Strip labeled metadata sections with their JSON code blocks
-  //    e.g. "Conversation info (untrusted metadata):\n```json\n{...}\n```"
-  cleaned = cleaned.replace(
-    /(?:Conversation info|Sender|Replied message)\s*\(untrusted[^)]*\):\s*```json\s*\{[\s\S]*?\}\s*```/g,
-    "",
-  );
-
-  // 3. Strip any remaining JSON blocks that look like envelope metadata
-  //    (contain message_id and sender_id fields)
-  cleaned = cleaned.replace(
-    /```json\s*\{[^}]*"message_id"\s*:[^}]*"sender_id"\s*:[^}]*\}\s*```/g,
+  return text.trim();
+}]*"sender_id"\s*:[^}]*\}\s*```/g,
     "",
   );
 
