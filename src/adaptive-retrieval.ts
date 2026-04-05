@@ -34,7 +34,7 @@ const FORCE_RETRIEVE_PATTERNS = [
   /(你记得|[你妳]記得|之前|上次|以前|还记得|還記得|提到过|提到過|说过|說過)/i,
   // German retrieval triggers
   /\b(erinnerst du dich|weißt du noch|hast du gespeichert)\b/i,
-  /\b(gestern|letzte[srnm]?\s+mal|vorher|früher|neulich|kürzlich)\b/i,
+  /\b(gestern|letzte[srnm]?\s+(?:mal|woche|zeit)|vorher|früher|neulich|kürzlich|damals)\b/i,
 ];
 
 /**

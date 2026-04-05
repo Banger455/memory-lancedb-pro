@@ -14,8 +14,8 @@ const jiti = jitiFactory(import.meta.url, {
   },
 });
 
-// --- shouldCapture (index.ts) ---
-const { shouldCapture } = jiti("../index.ts");
+// --- shouldCapture + detectCategory (index.ts) ---
+const { shouldCapture, detectCategory } = jiti("../index.ts");
 
 // --- shouldSkipRetrieval (adaptive-retrieval.ts) ---
 const { shouldSkipRetrieval } = jiti("../src/adaptive-retrieval.ts");
@@ -158,6 +158,10 @@ describe("shouldCapture — German false-positive prevention", () => {
     assert.equal(shouldCapture("Die Wichtigkeit dieser Metrik wird überschätzt finde ich"), false);
   });
 
+  it("does NOT capture 'Ich willkommen alle' (substring 'ich will' in 'willkommen')", () => {
+    assert.equal(shouldCapture("Ich willkommen alle zum Meeting heute"), false);
+  });
+
   it("does NOT capture 'Er heißt Peter' (no 'mein' prefix)", () => {
     assert.equal(shouldCapture("Er heißt Peter und kommt aus Hamburg in Norddeutschland"), false);
   });
@@ -271,6 +275,64 @@ describe("shouldCapture — explicit remember command consistency", () => {
         `Expected shouldCapture to return true for: "${padded}"`);
     });
   }
+});
+
+// ==========================================================================
+// detectCategory — German classification
+// ==========================================================================
+describe("detectCategory — German inputs", () => {
+  // --- Preference ---
+  it("classifies 'Ich bevorzuge TypeScript' as preference", () => {
+    assert.equal(detectCategory("Ich bevorzuge TypeScript"), "preference");
+  });
+
+  it("classifies 'Ich mag keine Tabs' as preference", () => {
+    assert.equal(detectCategory("Ich mag keine Tabs"), "preference");
+  });
+
+  it("classifies 'am liebsten nutze ich vim' as preference", () => {
+    assert.equal(detectCategory("am liebsten nutze ich vim"), "preference");
+  });
+
+  // --- Decision ---
+  it("classifies 'Wir haben entschieden Kubernetes' as decision", () => {
+    assert.equal(detectCategory("Wir haben entschieden Kubernetes"), "decision");
+  });
+
+  it("classifies 'Ab sofort nutzen wir pnpm' as decision", () => {
+    assert.equal(detectCategory("Ab sofort nutzen wir pnpm"), "decision");
+  });
+
+  it("does NOT classify 'unentschieden' as decision (substring)", () => {
+    assert.notEqual(detectCategory("Das Spiel war unentschieden Ende"), "decision");
+  });
+
+  // --- Entity ---
+  it("classifies 'Mein Name heißt Max' as entity", () => {
+    assert.equal(detectCategory("Mein Name heißt Max Eschbach"), "entity");
+  });
+
+  // --- Fact ---
+  it("classifies 'Das System ist schnell' as fact", () => {
+    assert.equal(detectCategory("Das System ist schnell und gut"), "fact");
+  });
+});
+
+// ==========================================================================
+// shouldSkipRetrieval — extended German temporal patterns
+// ==========================================================================
+describe("shouldSkipRetrieval — extended German temporal", () => {
+  it("forces retrieval for 'Letzte Woche hatten wir den Bug'", () => {
+    assert.equal(shouldSkipRetrieval("Letzte Woche hatten wir den Bug"), false);
+  });
+
+  it("forces retrieval for 'Damals haben wir Postgres genutzt'", () => {
+    assert.equal(shouldSkipRetrieval("Damals haben wir Postgres genutzt"), false);
+  });
+
+  it("forces retrieval for short 'damals?' (pattern match overrides length)", () => {
+    assert.equal(shouldSkipRetrieval("damals?"), false);
+  });
 });
 
 console.log("OK: german-i18n-triggers test passed");

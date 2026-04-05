@@ -1272,7 +1272,7 @@ const MEMORY_TRIGGERS = [
   /幫我|筆記|存檔|存起來|存一下|重點|原則|底線/,
   // German triggers
   /merk(?:e?\s+dir|\s+es\s+dir)|erinner(?:e)?\s+dich|vergiss\s+(?:das\s+)?nicht|nicht\s+vergessen/i,
-  /ich bevorzuge|ich mag|ich hasse|ich will|ich brauche/i,
+  /ich bevorzuge|ich mag\b|ich hasse|ich will\b|ich brauche/i,
   /wir haben entschieden|wir nutzen|ab jetzt|ab sofort|in zukunft/i,
   /mein\s+\w+\s+(?:ist|heißt)|ich\s+(?:wohne|arbeite)\b/i,
   /\b(immer\s+(?:wenn|daran|denken|merken|beachten)|niemals|wichtig)\b/i,
@@ -1331,14 +1331,14 @@ export function detectCategory(
 ): "preference" | "fact" | "decision" | "entity" | "other" {
   const lower = text.toLowerCase();
   if (
-    /prefer|radši|like|love|hate|want|偏好|喜歡|喜欢|討厭|讨厌|不喜歡|不喜欢|愛用|爱用|習慣|习惯|bevorzuge|ich mag|ich hasse|ich will|ich brauche|lieber|am liebsten/i.test(
+    /prefer|radši|like|love|hate|want|偏好|喜歡|喜欢|討厭|讨厌|不喜歡|不喜欢|愛用|爱用|習慣|习惯|ich bevorzuge|ich mag\b|ich hasse|ich will\b|ich brauche|lieber|am liebsten/i.test(
       lower,
     )
   ) {
     return "preference";
   }
   if (
-    /rozhodli|decided|we decided|will use|we will use|we'?ll use|switch(ed)? to|migrate(d)? to|going forward|from now on|budeme|決定|决定|選擇了|选择了|改用|換成|换成|以後用|以后用|規則|流程|SOP|entschieden|wir nutzen|ab jetzt|ab sofort|in zukunft|wechseln zu|umsteigen/i.test(
+    /rozhodli|decided|we decided|will use|we will use|we'?ll use|switch(ed)? to|migrate(d)? to|going forward|from now on|budeme|決定|决定|選擇了|选择了|改用|換成|换成|以後用|以后用|規則|流程|SOP|\bentschieden|wir nutzen|ab jetzt|ab sofort|in zukunft|wechseln zu|umsteigen/i.test(
       lower,
     )
   ) {
