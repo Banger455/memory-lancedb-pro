@@ -2641,11 +2641,13 @@ const memoryLanceDBProPlugin = {
           return;
         }
 
-        // Fire-and-forget: run capture work in the background so the hook
-        // returns immediately and does not hold the session lock.  Blocking
-        // here causes downstream channel deliveries (e.g. Telegram) to be
-        // silently dropped when the session store lock times out.
-        // See: https://github.com/CortexReach/memory-lancedb-pro/issues/260
+        // Await capture with a 15 s safety timeout so that memory writes
+        // are not silently dropped when the host agent exits immediately
+        // after this hook fires.  The timeout prevents the hook from holding
+        // the session lock indefinitely (which would stall downstream channel
+        // deliveries — see #260).  If the timeout fires first, the capture
+        // promise is still running but the hook returns, matching the old
+        // fire-and-forget behaviour as a fallback.
         const backgroundRun = (async () => {
         try {
           // Feature 7: Check extraction rate limit before any work
